@@ -2,37 +2,87 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.video-player {
+  position: relative;
+  max-width: 840px;
+  margin: 0 auto;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.video-player video {
+  width: 100%;
+  margin-bottom: 45px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.video-player .controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
 }
 
-.App-link {
-  color: #61dafb;
+.video-player .controls button,
+.video-player .controls input[type="range"] {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  padding: 0.5rem;
+  cursor: pointer;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.video-player .controls button:focus {
+  outline: none;
+}
+
+.video-player .controls .timeline {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  margin: 0 1rem;
+}
+
+.video-player .controls .timeline span {
+  font-size: 0.8rem;
+  margin: 0 0.5rem;
+}
+
+.video-player .controls input[type="range"] {
+  width: 100%;
+  margin: 0 1rem;
+  
+}
+
+.video-player .controls input[type="range"]::-webkit-slider-runnable-track {
+  background: #ffff;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.video-player .controls input[type="range"]::-webkit-slider-thumb {
+  background: #d71818;
+  width: 50px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: -3px;
+}
+
+.video-player .controls input[type="range"]:focus {
+  outline: none;
+}
+
+.controls button[data-state="subtitles"] {
+  height: 85%;
+  text-indent: 0;
+  font-size: 16px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #666;
+  background: #000;
+  border-radius: 2px;
 }
