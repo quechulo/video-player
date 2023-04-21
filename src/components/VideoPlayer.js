@@ -122,7 +122,7 @@ const VideoPlayer = () => {
   return (
     <>
       <div className="video-player" ref={videoPlayerRef}>
-        <video ref={videoRef} controls>
+        <video ref={videoRef}>
           <source src={src} type="video/mp4" />
           <track label="Poland" kind="subtitles" srclang="pl" src={sub_src} default />
         </video>

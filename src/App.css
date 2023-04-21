@@ -6,34 +6,47 @@
   position: relative;
   max-width: 840px;
   margin: 0 auto;
+  overflow: hidden
 }
 
 .video-player video {
   width: 100%;
-  margin-bottom: 45px;
+  margin-bottom: 47px;
 }
 
 .video-player .controls {
   position: absolute;
   bottom: 0;
+  border-radius: 0px 0px 10px 10px;
   left: 0;
   right: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: #fff;
+  background-color: rgba(46, 47, 48, 0.7);
+  color: #ffff;
 }
 
 .video-player .controls button,
 .video-player .controls input[type="range"] {
+  
   background-color: transparent;
   border: none;
-  color: #fff;
+  color: #ffff;
   font-size: 1rem;
   padding: 0.5rem;
   cursor: pointer;
+}
+
+.video-player .controls input[type="range"]::-ms-fill-lower {
+  background: red;
+  border-radius: 10px;
+}
+
+.video-player .controls input[type="range"]::-ms-fill-upper {
+  background: rgb(255, 251, 0);
+  border-radius: 10px;
 }
 
 .video-player .controls button:focus {
@@ -48,14 +61,16 @@
 }
 
 .video-player .controls .timeline span {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   margin: 0 0.5rem;
 }
 
 .video-player .controls input[type="range"] {
   width: 100%;
   margin: 0 1rem;
-  
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .video-player .controls input[type="range"]::-webkit-slider-runnable-track {
@@ -64,12 +79,21 @@
   border-radius: 2px;
 }
 
+.video-player .controls input[type="range"]::-ms-tooltip {
+  display: none;
+}
+
+.video-player .controls input[type="range"]::-moz-range-track {
+  background: rgb(255, 255, 255);
+}
+
 .video-player .controls input[type="range"]::-webkit-slider-thumb {
-  background: #d71818;
+  background: #f7f6f6;
   width: 50px;
   height: 10px;
   border-radius: 50%;
-  margin-top: -3px;
+  margin-top: -5px;
+
 }
 
 .video-player .controls input[type="range"]:focus {
@@ -79,10 +103,9 @@
 .controls button[data-state="subtitles"] {
   height: 85%;
   text-indent: 0;
-  font-size: 16px;
   font-size: 1rem;
-  font-weight: bold;
-  color: #666;
-  background: #000;
+  font-weight: normal;
+  color: #ffff;
+  background: transparent;
   border-radius: 2px;
 }
