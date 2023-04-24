@@ -1,42 +1,31 @@
-import "../App.css";
+import "./VideoPlayer.css";
 import { useRef, useState, useEffect } from "react";
-import { sub } from "../formatSubtitles";
-
-const subData = sub;
-console.log(subData);
 
 const VideoPlayer = () => {
   const src =
     "http://n-22-8.dcs.redcdn.pl/file/o2/atendesoftware/portal/video/atendesoftware/atendesoftware2.mp4";
-  const sub_src = "subtitles.vtt";
+  const sub_src = "/subtitles/subtitles.vtt";
+
   const videoRef = useRef(null);
   const videoPlayerRef = useRef(null);
   const muteBtn = useRef(null);
   const volumeRange = useRef(null);
-  const subtitles = document.getElementById("subtitles");
+  const ccBtn = useRef(null);
+  const fsBtn = useRef(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
-  const [ccOn, setCcIsOn] = useState(false);
-  //   const [subtitles, setSubtitles] = useState("");
+  const [ccClicked, setCcClicked] = useState(false);
   const [fullScreen, setFullScreen] = useState(false);
   const [volume, setVolume] = useState(1);
 
   useEffect(() => {
-    // subtitles.addEventListener("click", handleCC);
     videoRef.current.addEventListener("play", handlePlay);
     videoRef.current.addEventListener("pause", handlePause);
     videoRef.current.addEventListener("timeupdate", handleTimeUpdate);
     videoRef.current.addEventListener("loadedmetadata", handleLoadedMetadata);
-    // volumeContainer.current.addEventListener("hoover", function () {
-    //   volumeRange.current.style.display = "block";
-    // });
-
-    // volumeContainer.current.addEventListener("blur", function () {
-    //   volumeRange.current.style.display = "none";
-    // });
 
     return () => {
       videoRef.current.removeEventListener("play", handlePlay);
@@ -59,24 +48,7 @@ const VideoPlayer = () => {
 
   const handleTimeUpdate = () => {
     setCurrentTime(videoRef.current.currentTime);
-    // let now = new Date(videoRef.current.currentTime * 1000).toISOString().substring(11, 16)
-    // now = "00:" + now + ".100";
-    // let lineToPrint;
-    // if (ccOn) {
-    //   lineToPrint = subData.find(
-    //     (time) =>
-    //       time.start <= now &&
-    //       time.stop > now
-    //   );
-    // }
-    // console.log(now)
-    // if (lineToPrint && lineToPrint.text !== subtitles) {
-    //   setSubtitles(lineToPrint.text);
-    // } else if (!lineToPrint) {
-    //   setSubtitles("");
-    // }
   };
-  const handleCC = () => {};
 
   const handleLoadedMetadata = () => {
     setDuration(videoRef.current.duration);
@@ -100,28 +72,15 @@ const VideoPlayer = () => {
     videoRef.current.currentTime = event.target.value;
   };
 
-  const handleSubtitlesClick = () => {
-    setCcIsOn(!ccOn);
-    for (let i = 0; i < videoRef.textTracks.length; i++) {
-      videoRef.textTracks[i].mode = "hidden";
-    }
-    console.log("csIsOn: " + ccOn);
-    let subtitlesMenu;
-    if (videoRef.textTracks) {
-      const df = document.createDocumentFragment();
-      const subtitlesMenu = df.appendChild(document.createElement("ul"));
-      subtitlesMenu.className = "subtitles-menu";
-      subtitlesMenu.appendChild(createMenuItem("subtitles-off", "", "Off"));
-      for (let i = 0; i < videoRef.textTracks.length; i++) {
-        subtitlesMenu.appendChild(
-          createMenuItem(
-            `subtitles-${videoRef.textTracks[i].language}`,
-            videoRef.textTracks[i].language,
-            videoRef.textTracks[i].label
-          )
-        );
-      }
-      videoContainer.appendChild(subtitlesMenu);
+  const handleSubtitlesClick = (event) => {
+    const textTrc = videoRef.current.textTracks[0];
+    textTrc.mode = textTrc.mode === "showing" ? "hidden" : "showing";
+    if (ccClicked) {
+      setCcClicked(false);
+      ccBtn.current.style.color = "white";
+    } else {
+      setCcClicked(true);
+      ccBtn.current.style.color = "#0075ff";
     }
   };
 
@@ -135,12 +94,14 @@ const VideoPlayer = () => {
 
     if (!fullScreen) {
       el.requestFullscreen();
+      fsBtn.current.style.color = "#0075ff";
     }
     if (fullScreen) {
       document
         .exitFullscreen()
         .then(() => console.log("Document Exited from Full screen mode"))
         .catch((err) => console.error(err));
+      fsBtn.current.style.color = "white";
     }
 
     setFullScreen(!fullScreen);
@@ -158,13 +119,7 @@ const VideoPlayer = () => {
       <div className="video-player" ref={videoPlayerRef}>
         <video ref={videoRef}>
           <source src={src} type="video/mp4" />
-          <track
-            label="Poland"
-            kind="subtitles"
-            srclang="pl"
-            src={sub_src}
-            default
-          />
+          <track kind="subtitles" srcLang="en" src={sub_src} mode="hidden" />
         </video>
 
         <div className="controls">
@@ -183,10 +138,11 @@ const VideoPlayer = () => {
             />
             <span>{formatTime(duration - currentTime)}</span>
           </div>
+
           <button ref={muteBtn} onClick={handleMuteClick}>
             {isMuted ? "Unmute" : "Mute"}
           </button>
-          {/* <div ref={volumeContainer} id="volume-container"> */}
+
           <input
             className="volume-adjust"
             type="range"
@@ -198,23 +154,15 @@ const VideoPlayer = () => {
             value={volume}
             onChange={handleVolumeChange}
           ></input>
-          {/* </div> */}
-          {/* <input className="volume"
-          type="range"
-          min="0"
-          max="1"
-          step="0.1"
-          value={volume}
-          onChange={()=>{setVolume(value)}}
-          /> */}
-          <button id="subtitles" type="button" data-state="subtitles">
+          
+          <button ref={ccBtn} onClick={handleSubtitlesClick}>
             CC
           </button>
-
-          <button onClick={handleFullScreen}>[fs]</button>
+          <button ref={fsBtn} onClick={handleFullScreen}>
+            [fs]
+          </button>
         </div>
       </div>
-      {ccOn ? <div className="subtitle">{subtitles}Hello</div> : <></>}
     </>
   );
 };
