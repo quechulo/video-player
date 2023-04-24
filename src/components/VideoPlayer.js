@@ -8,9 +8,11 @@ console.log(subData);
 const VideoPlayer = () => {
   const src =
     "http://n-22-8.dcs.redcdn.pl/file/o2/atendesoftware/portal/video/atendesoftware/atendesoftware2.mp4";
-  const sub_src = "/subtitles.vtt";
+  const sub_src = "subtitles.vtt";
   const videoRef = useRef(null);
   const videoPlayerRef = useRef(null);
+  const muteBtn = useRef(null);
+  const volumeRange = useRef(null);
   const subtitles = document.getElementById("subtitles");
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -20,7 +22,7 @@ const VideoPlayer = () => {
   const [ccOn, setCcIsOn] = useState(false);
   //   const [subtitles, setSubtitles] = useState("");
   const [fullScreen, setFullScreen] = useState(false);
-  //   const [volume, setVolume] = useState(1);
+  const [volume, setVolume] = useState(1);
 
   useEffect(() => {
     // subtitles.addEventListener("click", handleCC);
@@ -28,6 +30,13 @@ const VideoPlayer = () => {
     videoRef.current.addEventListener("pause", handlePause);
     videoRef.current.addEventListener("timeupdate", handleTimeUpdate);
     videoRef.current.addEventListener("loadedmetadata", handleLoadedMetadata);
+    // volumeContainer.current.addEventListener("hoover", function () {
+    //   volumeRange.current.style.display = "block";
+    // });
+
+    // volumeContainer.current.addEventListener("blur", function () {
+    //   volumeRange.current.style.display = "none";
+    // });
 
     return () => {
       videoRef.current.removeEventListener("play", handlePlay);
@@ -93,7 +102,32 @@ const VideoPlayer = () => {
 
   const handleSubtitlesClick = () => {
     setCcIsOn(!ccOn);
+    for (let i = 0; i < videoRef.textTracks.length; i++) {
+      videoRef.textTracks[i].mode = "hidden";
+    }
     console.log("csIsOn: " + ccOn);
+    let subtitlesMenu;
+    if (videoRef.textTracks) {
+      const df = document.createDocumentFragment();
+      const subtitlesMenu = df.appendChild(document.createElement("ul"));
+      subtitlesMenu.className = "subtitles-menu";
+      subtitlesMenu.appendChild(createMenuItem("subtitles-off", "", "Off"));
+      for (let i = 0; i < videoRef.textTracks.length; i++) {
+        subtitlesMenu.appendChild(
+          createMenuItem(
+            `subtitles-${videoRef.textTracks[i].language}`,
+            videoRef.textTracks[i].language,
+            videoRef.textTracks[i].label
+          )
+        );
+      }
+      videoContainer.appendChild(subtitlesMenu);
+    }
+  };
+
+  const handleVolumeChange = (event) => {
+    setVolume(event.target.value);
+    videoRef.current.volume = event.target.value;
   };
 
   const handleFullScreen = () => {
@@ -124,7 +158,13 @@ const VideoPlayer = () => {
       <div className="video-player" ref={videoPlayerRef}>
         <video ref={videoRef}>
           <source src={src} type="video/mp4" />
-          <track label="Poland" kind="subtitles" srclang="pl" src={sub_src} default />
+          <track
+            label="Poland"
+            kind="subtitles"
+            srclang="pl"
+            src={sub_src}
+            default
+          />
         </video>
 
         <div className="controls">
@@ -137,26 +177,40 @@ const VideoPlayer = () => {
               type="range"
               min="0"
               max={duration}
-              step="5.0"
+              step="1.0"
               value={currentTime}
               onChange={handleTimeChange}
             />
             <span>{formatTime(duration - currentTime)}</span>
           </div>
-          <button onClick={handleMuteClick}>
+          <button ref={muteBtn} onClick={handleMuteClick}>
             {isMuted ? "Unmute" : "Mute"}
           </button>
-          <button id="subtitles" type="button" data-state="subtitles">
-            CC
-          </button>
-          {/* <input
+          {/* <div ref={volumeContainer} id="volume-container"> */}
+          <input
+            className="volume-adjust"
+            type="range"
+            ref={volumeRange}
+            id="volume-range"
+            min="0"
+            max="1"
+            step="0.1"
+            value={volume}
+            onChange={handleVolumeChange}
+          ></input>
+          {/* </div> */}
+          {/* <input className="volume"
           type="range"
           min="0"
           max="1"
           step="0.1"
           value={volume}
-          onChange={()=>{}}
-        /> */}
+          onChange={()=>{setVolume(value)}}
+          /> */}
+          <button id="subtitles" type="button" data-state="subtitles">
+            CC
+          </button>
+
           <button onClick={handleFullScreen}>[fs]</button>
         </div>
       </div>

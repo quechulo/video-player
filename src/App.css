@@ -4,7 +4,7 @@
 
 .video-player {
   position: relative;
-  max-width: 840px;
+  max-width: 70%;
   margin: 0 auto;
   overflow: hidden
 }
@@ -57,17 +57,17 @@
   flex-grow: 1;
   display: flex;
   align-items: center;
-  margin: 0 1rem;
+  margin: 0;
 }
 
 .video-player .controls .timeline span {
   font-size: 0.9rem;
-  margin: 0 0.5rem;
+  margin: 0 0.3rem;
 }
 
 .video-player .controls input[type="range"] {
   width: 100%;
-  margin: 0 1rem;
+  margin: 0 0.3rem;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -108,4 +108,16 @@
   color: #ffff;
   background: transparent;
   border-radius: 2px;
+}
+
+#volume-container {
+  /* padding: 8px; */
+  margin: 0px;
+  width: auto;
+}
+
+#volume-range.volume-adjust {
+  padding: 0.5rem;
+  margin: 0;
+  width: 50px;
 }
