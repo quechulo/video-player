@@ -1,6 +1,6 @@
 .video-player {
     position: relative;
-    max-width: 70%;
+    max-width: 90%;
     margin: 0 auto;
     overflow: hidden
   }
@@ -8,8 +8,19 @@
   .video-player video {
     width: 100%;
     margin-bottom: 47px;
+    max-height: 96.5%;
   }
   
+  video::cue {
+    display: block;
+    position: relative;
+    bottom: 3em; 
+    font-size: 1.1em; 
+    text-align: center; 
+    color: yellow;
+    text-shadow: 0 0 0.5em black;
+  }
+
   .video-player .controls {
     position: absolute;
     bottom: 0;
