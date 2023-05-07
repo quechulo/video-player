@@ -3,8 +3,8 @@ import { useRef, useState, useEffect } from "react";
 
 const VideoPlayer = () => {
   const src =
-    "http://n-22-8.dcs.redcdn.pl/file/o2/atendesoftware/portal/video/atendesoftware/atendesoftware2.mp4";
-  const sub_src = "/subtitles/subtitles.vtt";
+    "http://www.peach.themazzone.com/durian/movies/sintel-1024-surround.mp4";
+  const sub_src = "/subtitles/subtitles_sintel_pl.vtt";
 
   const videoRef = useRef(null);
   const videoPlayerRef = useRef(null);
